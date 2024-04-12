@@ -1,0 +1,68 @@
+class ContaBancaria:
+    def __init__(self):
+        self.saldo = 0
+        self.saques_feitos = 0
+        self.saques_diarios = 0
+        self.extrato = []
+
+    def depositar(self, valor):
+        self.saldo += valor
+        self.extrato.append(f"Depósito de R${valor:.2f}")
+
+    def sacar(self, valor):
+        if self.saques_feitos < 3 and self.saques_diarios < 3 and valor <= 500 and valor <= self.saldo:
+            self.saldo -= valor
+            self.saques_feitos += 1
+            self.saques_diarios += 1
+            self.extrato.append(f"Saque de R${valor:.2f}")
+            print("Saque realizado com sucesso!")
+        else:
+            print("Saque não pode ser realizado.")
+
+    def gerar_extrato(self):
+        print("Extrato:")
+        for operacao in self.extrato:
+            print(operacao)
+        print(f"Saldo atual: R${self.saldo:.2f}")
+
+    def reiniciar_saques_diarios(self):
+        self.saques_diarios = 0
+
+
+def main():
+    conta = ContaBancaria()
+
+    while True:
+        print("\n" * 2)  # Adiciona 20 linhas em branco para centralizar o menu
+
+        print("\n" + "=" * 20 + " MENU " + "=" * 20 + "\n")
+        print(" " * 18 + "Menu:")
+        print(" " * 18 + "1. Depositar")
+        print(" " * 18 + "2. Sacar")
+        print(" " * 18 + "3. Extrato")
+        print(" " * 18 + "0. Sair")
+        print("\n" + "=" * 46 + "\n")
+
+        opcao = input("Escolha uma opção: ")
+
+        if opcao == "1":
+            valor = float(input("Digite o valor a ser depositado: "))
+            conta.depositar(valor)
+            print("Depósito realizado com sucesso!")
+        elif opcao == "2":
+            valor = float(input("Digite o valor a ser sacado: "))
+            conta.sacar(valor)
+        elif opcao == "3":
+            conta.gerar_extrato()
+        elif opcao == "0":
+            print("Obrigado por utilizar nosso Sistema...Banco Kauffmann Agradece!!!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+        # Reinicia o contador de saques diários no início de um novo dia
+        if opcao in ["1", "2"]:
+            conta.reiniciar_saques_diarios()
+
+if __name__ == "__main__":
+    main()
